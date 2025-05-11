@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
 import React, { useState } from 'react';
 import { Button, CircularProgress, Box, Typography, Divider } from '@mui/material';
 import { useRouter } from 'next/navigation'; // Agora irá funcionar corretamente
 import FormInput from './FormInput';
-// import { fetchLogin } from '../utils/fetch';  // Se necessário, remova o comentário
+import { loginUser } from '../../app/login/actions/index'; // Importa a função loginUser
 
 const LoginForm: React.FC = () => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
@@ -12,26 +12,22 @@ const LoginForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const router = useRouter();  // Use 'useRouter' agora que está dentro de um componente cliente
+  const router = useRouter(); // Usando 'useRouter' para redirecionamento
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    // try {
-    //   const response = await fetchLogin(emailOrUsername, password);
-    //   if (response.ok) {
-    //     // Salvar o token no localStorage ou cookies
-    //     router.push('/dashboard');  // Roteia para a página de dashboard
-    //   } else {
-    //     setError('Login failed. Please try again.');
-    //   }
-    // } catch (err) {
-    //   setError('An error occurred. Please try again.');
-    // } finally {
-    //   setLoading(false);
-    // }
+    const result = await loginUser(emailOrUsername, password); // Chama a função de login da pasta actions
+
+    if (result.success) {
+      router.push('/workouts'); // Redireciona para a área logada
+    } else {
+      setError(result.message); // Exibe mensagem de erro
+    }
+
+    setLoading(false);
   };
 
   return (

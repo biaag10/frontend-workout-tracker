@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Button, CircularProgress, Box, Typography, Divider } from '@mui/material';
 import { useRouter } from 'next/navigation';  // Agora vai funcionar corretamente no lado cliente
 import FormInput from '../Login/FormInput';  // Certifique-se de que este componente está no caminho correto
+import { registerUser } from '../../app/register/actions/index';  // Função de cadastro importada
 
 const SignUpForm = () => {
   const [name, setName] = useState('');
@@ -12,31 +13,23 @@ const SignUpForm = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  const router = useRouter();  // Usando useRouter após marcar o componente como "client-side"
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError('');  // Resetando o erro ao submeter o formulário
 
     try {
-      // Chamada para o backend ou alguma lógica de signup
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, username, email, password }),
-      });
-
-      if (response.ok) {
-        router.push('/workout');  // Redireciona após o login
-      } else {
-        setError('Signup failed. Please try again.');
+      // Chamando a função que registra o usuário
+      const result = await registerUser(name, username, email, password);
+      
+      if (result) {
+        // Se o registro for bem-sucedido, redireciona para a página de treinos
+        router.push('/workouts');
       }
-    } catch (err) {
-      setError('An error occurred. Please try again.');
+    } catch (err: any) {
+      setError(err.message || 'An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }

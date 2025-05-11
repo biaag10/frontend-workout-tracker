@@ -1,35 +1,58 @@
 'use client';
+
 import React, { useState } from 'react';
-import { Button, Box, Typography, TextField, CircularProgress } from '@mui/material';
+import { Button, Box, Typography, TextField, CircularProgress, Divider } from '@mui/material';
 
 const AddWorkoutForm: React.FC = () => {
-  const [workoutName, setWorkoutName] = useState('');
+  const [workoutTitle, setWorkoutTitle] = useState('');
+  const [exercises, setExercises] = useState<{ name: string; series: { reps: number; weight: number }[] }[]>([]);
   const [loading, setLoading] = useState(false);
-  const [sets, setSets] = useState<{ setNumber: number; weight: string }[]>([]);
 
-  const handleAddSet = () => {
-    const nextSetNumber = sets.length + 1;
-    setSets([...sets, { setNumber: nextSetNumber, weight: '' }]);
+  // Função para adicionar um exercício
+  const handleAddExercise = () => {
+    setExercises([
+      ...exercises,
+      { name: '', series: [{ reps: 0, weight: 0 }] }, // Novo exercício com uma série inicial
+    ]);
   };
 
-  const handleWeightChange = (index: number, value: string) => {
-    const updatedSets = [...sets];
-    updatedSets[index].weight = value;
-    setSets(updatedSets);
+  // Função para modificar o nome do exercício
+  const handleExerciseNameChange = (index: number, name: string) => {
+    const updatedExercises = [...exercises];
+    updatedExercises[index].name = name;
+    setExercises(updatedExercises);
   };
 
+  // Função para modificar a série do exercício
+  const handleSeriesChange = (exerciseIndex: number, seriesIndex: number, field: string, value: number) => {
+    const updatedExercises = [...exercises];
+    updatedExercises[exerciseIndex].series[seriesIndex] = {
+      ...updatedExercises[exerciseIndex].series[seriesIndex],
+      [field]: value,
+    };
+    setExercises(updatedExercises);
+  };
+
+  // Função para adicionar uma nova série ao exercício
+  const handleAddSeries = (index: number) => {
+    const updatedExercises = [...exercises];
+    updatedExercises[index].series.push({ reps: 0, weight: 0 });
+    setExercises(updatedExercises);
+  };
+
+  // Enviar dados para a API
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Handle workout creation logic
     try {
-      const response = await fetch('/api/workouts', {
+      const response = await fetch('http://localhost:3000/workouts/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Usando o token do localStorage
         },
-        body: JSON.stringify({ workoutName, sets }),
+        body: JSON.stringify({ title: workoutTitle, exercises }),
       });
 
       if (response.ok) {
@@ -45,45 +68,72 @@ const AddWorkoutForm: React.FC = () => {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, margin: 'auto', padding: 3 }}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600, margin: 'auto', padding: 3 }}>
       <Typography variant="h4" align="center" gutterBottom>
         Add New Workout
       </Typography>
 
+      {/* Input para o título do treino */}
       <TextField
-        label="Workout Name"
+        label="Workout Title"
         variant="outlined"
         fullWidth
-        value={workoutName}
-        onChange={(e) => setWorkoutName(e.target.value)}
+        value={workoutTitle}
+        onChange={(e) => setWorkoutTitle(e.target.value)}
         required
         sx={{ marginBottom: 2 }}
       />
 
-      {/* Dynamic sets input */}
+      {/* Campos para adicionar exercícios */}
       <Box sx={{ marginBottom: 2 }}>
         <Typography variant="h6" gutterBottom>
-          Add Sets
+          Exercises
         </Typography>
-        {sets.map((set, index) => (
-          <Box key={index} sx={{ display: 'flex', gap: 2, marginBottom: 2 }}>
+        {exercises.map((exercise, index) => (
+          <Box key={index} sx={{ marginBottom: 2 }}>
             <TextField
-              label={`Set ${set.setNumber}`}
+              label={`Exercise ${index + 1} Name`}
               variant="outlined"
-              type="number"
-              value={set.weight}
-              onChange={(e) => handleWeightChange(index, e.target.value)}
-              required
               fullWidth
+              value={exercise.name}
+              onChange={(e) => handleExerciseNameChange(index, e.target.value)}
+              required
+              sx={{ marginBottom: 1 }}
             />
+            {exercise.series.map((set, setIndex) => (
+              <Box key={setIndex} sx={{ display: 'flex', gap: 2, marginBottom: 1 }}>
+                <TextField
+                  label={`Set ${setIndex + 1} Reps`}
+                  variant="outlined"
+                  type="number"
+                  value={set.reps}
+                  onChange={(e) => handleSeriesChange(index, setIndex, 'reps', parseInt(e.target.value))}
+                  required
+                  fullWidth
+                />
+                <TextField
+                  label={`Set ${setIndex + 1} Weight`}
+                  variant="outlined"
+                  type="number"
+                  value={set.weight}
+                  onChange={(e) => handleSeriesChange(index, setIndex, 'weight', parseInt(e.target.value))}
+                  required
+                  fullWidth
+                />
+              </Box>
+            ))}
+            <Button variant="outlined" onClick={() => handleAddSeries(index)} sx={{ width: '100%' }}>
+              Add Set
+            </Button>
           </Box>
         ))}
 
-        <Button variant="outlined" onClick={handleAddSet} sx={{ width: '100%' }}>
-          Add Set
+        <Button variant="outlined" onClick={handleAddExercise} sx={{ width: '100%' }}>
+          Add Exercise
         </Button>
       </Box>
 
+      {/* Botão de envio */}
       <Button fullWidth variant="contained" type="submit" disabled={loading} sx={{ marginTop: 2 }}>
         {loading ? <CircularProgress size={24} /> : 'Add Workout'}
       </Button>
