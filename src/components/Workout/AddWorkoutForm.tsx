@@ -1,12 +1,14 @@
-'use client';
+'use client'
 
 import React, { useState } from 'react';
 import { Button, Box, Typography, TextField, CircularProgress, Divider } from '@mui/material';
+import { useRouter } from 'next/navigation'; // Usando useRouter para redirecionamento
 
 const AddWorkoutForm: React.FC = () => {
   const [workoutTitle, setWorkoutTitle] = useState('');
   const [exercises, setExercises] = useState<{ name: string; series: { reps: number; weight: number }[] }[]>([]);
   const [loading, setLoading] = useState(false);
+  const router = useRouter(); // Usando o router para redirecionamento após sucesso
 
   // Função para adicionar um exercício
   const handleAddExercise = () => {
@@ -57,6 +59,9 @@ const AddWorkoutForm: React.FC = () => {
 
       if (response.ok) {
         alert('Workout added successfully!');
+        setWorkoutTitle('');
+        setExercises([]);
+        router.push('/workouts'); // Redireciona para a página de treinos
       } else {
         alert('Error adding workout!');
       }
@@ -73,7 +78,6 @@ const AddWorkoutForm: React.FC = () => {
         Add New Workout
       </Typography>
 
-      {/* Input para o título do treino */}
       <TextField
         label="Workout Title"
         variant="outlined"
@@ -84,7 +88,6 @@ const AddWorkoutForm: React.FC = () => {
         sx={{ marginBottom: 2 }}
       />
 
-      {/* Campos para adicionar exercícios */}
       <Box sx={{ marginBottom: 2 }}>
         <Typography variant="h6" gutterBottom>
           Exercises
@@ -133,9 +136,12 @@ const AddWorkoutForm: React.FC = () => {
         </Button>
       </Box>
 
-      {/* Botão de envio */}
       <Button fullWidth variant="contained" type="submit" disabled={loading} sx={{ marginTop: 2 }}>
         {loading ? <CircularProgress size={24} /> : 'Add Workout'}
+      </Button>
+
+      <Button variant="outlined" onClick={() => router.push('/workouts/workouts-all')} sx={{ width: '100%', marginTop: 2 }}>
+        View Workouts
       </Button>
     </Box>
   );
