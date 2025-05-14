@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, CircularProgress, List, ListItem, ListItemText, IconButton, TextField } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { Delete, Edit } from '@mui/icons-material';
+import { Delete, Edit, ArrowBack } from '@mui/icons-material';  // Importa o ícone de setinha
 import { updateWorkout, deleteWorkout } from '../../app/workouts/actions/index'; 
 
 const WorkoutsPage: React.FC = () => {
@@ -104,9 +104,19 @@ const WorkoutsPage: React.FC = () => {
     router.push('/login'); // Redireciona para a página de login
   };
 
+  // Função para voltar para a página anterior
+  const handleGoBack = () => {
+    router.back(); // Volta para a página anterior
+  };
+
   return (
     <Box sx={{ maxWidth: 800, margin: 'auto', padding: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+        {/* Botão para voltar para a tela anterior */}
+        <IconButton onClick={handleGoBack} sx={{ color: 'black' }}>
+          <ArrowBack />
+        </IconButton>
+
         <Typography variant="h4" gutterBottom>
           Your Workouts
         </Typography>
@@ -210,12 +220,7 @@ const WorkoutsPage: React.FC = () => {
             Add Exercise
           </Button>
 
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={handleUpdateWorkout}
-            sx={{ marginTop: 2 }}
-          >
+          <Button fullWidth variant="contained" onClick={handleUpdateWorkout} sx={{ marginTop: 2 }}>
             Update Workout
           </Button>
         </Box>
