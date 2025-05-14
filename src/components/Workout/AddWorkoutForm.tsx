@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
 import React, { useState } from 'react';
-import { Button, Box, Typography, TextField, CircularProgress, Divider } from '@mui/material';
-import { useRouter } from 'next/navigation'; // Usando useRouter para redirecionamento
+import { Button, CircularProgress, Box, Typography, TextField, Divider } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
 const AddWorkoutForm: React.FC = () => {
   const [workoutTitle, setWorkoutTitle] = useState('');
@@ -74,9 +74,30 @@ const AddWorkoutForm: React.FC = () => {
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600, margin: 'auto', padding: 3 }}>
-      <Typography variant="h4" align="center" gutterBottom>
-        Add New Workout
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+        <Typography variant="h4" gutterBottom>
+          Add New Workout
+        </Typography>
+
+        {/* Botão de Logout pequeno ao lado do título */}
+        <Button
+          variant="outlined"
+          onClick={() => {
+            localStorage.removeItem('token');
+            router.push('/login');
+          }}
+          sx={{
+            fontSize: '10px',
+            padding: '4px 8px',
+            marginBottom: '14px',
+            backgroundColor: 'red',
+            color: 'white',
+            '&:hover': { backgroundColor: '#d32f2f' },
+          }}
+        >
+          Logout
+        </Button>
+      </Box>
 
       <TextField
         label="Workout Title"

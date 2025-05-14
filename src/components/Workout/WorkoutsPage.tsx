@@ -6,8 +6,6 @@ import { useRouter } from 'next/navigation';
 import { Delete, Edit } from '@mui/icons-material';
 import { updateWorkout, deleteWorkout } from '../../app/workouts/actions/index'; 
 
-
-
 const WorkoutsPage: React.FC = () => {
   const [workouts, setWorkouts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -100,11 +98,34 @@ const WorkoutsPage: React.FC = () => {
     setUpdatedExercises(updatedExercisesCopy);
   };
 
+  // Função para fazer logoff
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove o token do localStorage
+    router.push('/login'); // Redireciona para a página de login
+  };
+
   return (
     <Box sx={{ maxWidth: 800, margin: 'auto', padding: 3 }}>
-      <Typography variant="h4" align="center" gutterBottom>
-        Your Workouts
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+        <Typography variant="h4" gutterBottom>
+          Your Workouts
+        </Typography>
+
+        {/* Botão de Logout pequeno ao lado do título */}
+        <Button
+          variant="outlined"
+          onClick={handleLogout}
+          sx={{
+            fontSize: '10px',
+            padding: '4px 8px',
+            backgroundColor: 'red',
+            color: 'white',
+            '&:hover': { backgroundColor: '#d32f2f' },
+          }}
+        >
+          Logout
+        </Button>
+      </Box>
 
       {loading ? (
         <CircularProgress />

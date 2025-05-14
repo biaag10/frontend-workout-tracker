@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import { Button, CircularProgress, Box, Typography, Divider } from '@mui/material';
+import { Button, CircularProgress, Box, Typography, Divider, Checkbox, FormControlLabel } from '@mui/material';
 import { useRouter } from 'next/navigation';  // Agora vai funcionar corretamente no lado cliente
 import FormInput from '../Login/FormInput';  // Certifique-se de que este componente está no caminho correto
 import { registerUser } from '../../app/register/actions/index';  // Função de cadastro importada
@@ -13,6 +13,7 @@ const SignUpForm = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);  // estado para mostrar/esconder a senha
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,6 +34,10 @@ const SignUpForm = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);  // alterna a visibilidade da senha
   };
 
   return (
@@ -70,11 +75,22 @@ const SignUpForm = () => {
 
       <FormInput
         label="Password"
-        type="password"
+        type={showPassword ? 'text' : 'password'}  // Condicional para exibir ou esconder a senha
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         error={!!error}
         helperText={error && 'Password is required'}
+      />
+
+      <FormControlLabel
+        control={
+          <Checkbox 
+            checked={showPassword} 
+            onChange={handleTogglePasswordVisibility} 
+            color="primary" 
+          />
+        }
+        label="Show Password"
       />
 
       <Button fullWidth variant="contained" type="submit" disabled={loading} sx={{ marginTop: 2 }}>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, CircularProgress, Box, Typography, Divider } from '@mui/material';
+import { Button, CircularProgress, Box, Typography, Divider, Checkbox, FormControlLabel } from '@mui/material';
 import { useRouter } from 'next/navigation'; // Agora irá funcionar corretamente
 import FormInput from './FormInput';
 import { loginUser } from '../../app/login/actions/index'; // Importa a função loginUser
@@ -11,6 +11,7 @@ const LoginForm: React.FC = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);  // Adicionando estado para mostrar/esconder a senha
 
   const router = useRouter(); // Usando 'useRouter' para redirecionamento
 
@@ -30,6 +31,10 @@ const LoginForm: React.FC = () => {
     setLoading(false);
   };
 
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);  // Alterna a visibilidade da senha
+  };
+
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, margin: 'auto', padding: 6 }}>
       <Typography variant="h4" align="center" gutterBottom>
@@ -47,11 +52,22 @@ const LoginForm: React.FC = () => {
 
       <FormInput
         label="Password"
-        type="password"
+        type={showPassword ? 'text' : 'password'}  // Condicional para exibir ou esconder a senha
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         error={!!error}
         helperText={error && 'Incorrect password'}
+      />
+
+      <FormControlLabel
+        control={
+          <Checkbox 
+            checked={showPassword} 
+            onChange={handleTogglePasswordVisibility} 
+            color="primary" 
+          />
+        }
+        label="Show Password"
       />
 
       <Button fullWidth variant="contained" type="submit" disabled={loading} sx={{ marginTop: 2 }}>
