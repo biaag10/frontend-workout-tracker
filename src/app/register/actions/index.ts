@@ -1,6 +1,6 @@
 export const registerUser = async (name: string, username: string, email: string, password: string) => {
   try {
-    const response = await fetch('https://express-backend-mongodb.vercel.app/users/register', {
+    const response = await fetch('http://localhost:3000/users/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -4,7 +4,7 @@ export const createWorkout = async (
   exercises: { name: string; series: { reps: number; weight: number }[] }[]
 ) => {
   try {
-    const response = await fetch('https://express-backend-mongodb.vercel.app/workouts/register', {
+    const response = await fetch('http://localhost:3000/workouts/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export const updateWorkout = async (
   exercises: { name: string; series: { reps: number; weight: number }[] }[]
 ) => {
   try {
-    const response = await fetch(`https://express-backend-mongodb.vercel.app/workouts/update-all-workout/${workoutId}`, {
+    const response = await fetch(`http://localhost:3000/workouts/update-all-workout/${workoutId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export const patchWorkout = async (
   data: { title?: string; exercises?: { name: string; series: { reps: number; weight: number }[] }[] }
 ) => {
   try {
-    const response = await fetch(`https://express-backend-mongodb.vercel.app/workouts/update-workout/${workoutId}`, {
+    const response = await fetch(`http://localhost:3000/workouts/update-workout/${workoutId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export const patchWorkout = async (
 // função para excluir um treino (DELETE)
 export const deleteWorkout = async (workoutId: string) => {
   try {
-    const response = await fetch(`https://express-backend-mongodb.vercel.app/workouts/delete/${workoutId}`, {
+    const response = await fetch(`http://localhost:3000/workouts/delete/${workoutId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ export const deleteWorkout = async (workoutId: string) => {
 // função para buscar todos os treinos do usuário
 export const getAllWorkouts = async () => {
   try {
-    const response = await fetch('https://express-backend-mongodb.vercel.app/workouts/all-workouts', {
+    const response = await fetch('http://localhost:3000/workouts/all-workouts', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
