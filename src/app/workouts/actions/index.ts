@@ -1,10 +1,12 @@
+const API_URL = process.env.NEXT_PUBLIC_API_VERCEL_URL;
+
 // função para criar treino
 export const createWorkout = async (
   workoutTitle: string,
   exercises: { name: string; series: { reps: number; weight: number }[] }[]
 ) => {
   try {
-    const response = await fetch('http://localhost:3000/workouts/register', {
+    const response = await fetch(`${API_URL}/workouts/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +38,7 @@ export const updateWorkout = async (
   exercises: { name: string; series: { reps: number; weight: number }[] }[]
 ) => {
   try {
-    const response = await fetch(`http://localhost:3000/workouts/update-all-workout/${workoutId}`, {
+    const response = await fetch(`${API_URL}/workouts/update-all-workout/${workoutId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -66,7 +68,7 @@ export const patchWorkout = async (
   data: { title?: string; exercises?: { name: string; series: { reps: number; weight: number }[] }[] }
 ) => {
   try {
-    const response = await fetch(`http://localhost:3000/workouts/update-workout/${workoutId}`, {
+    const response = await fetch(`${API_URL}/workouts/update-workout/${workoutId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -93,7 +95,7 @@ export const patchWorkout = async (
 // função para excluir um treino (DELETE)
 export const deleteWorkout = async (workoutId: string) => {
   try {
-    const response = await fetch(`http://localhost:3000/workouts/delete/${workoutId}`, {
+    const response = await fetch(`${API_URL}/workouts/delete/${workoutId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -119,7 +121,7 @@ export const deleteWorkout = async (workoutId: string) => {
 // função para buscar todos os treinos do usuário
 export const getAllWorkouts = async () => {
   try {
-    const response = await fetch('http://localhost:3000/workouts/all-workouts', {
+    const response = await fetch(`${API_URL}/workouts/all-workouts`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,

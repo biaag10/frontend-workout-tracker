@@ -1,6 +1,8 @@
+const API_URL = process.env.NEXT_PUBLIC_API_VERCEL_URL;
+
 export const loginUser = async (emailOrUsername: string, password: string) => {
   try {
-    const response = await fetch('http://localhost:3000/users/login', {
+    const response = await fetch(`${API_URL}/users/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
