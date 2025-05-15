@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import FormInput from './FormInput';
 import { loginUser } from '../../app/login/actions/index';
 import { ArrowBack } from '@mui/icons-material';
-import { notifySuccess, notifyError } from '../toasts/index';  // ajuste o caminho conforme o seu projeto
+import { notifySuccess, notifyError } from '../toasts/index';
 
 const LoginForm: React.FC = () => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
@@ -50,12 +50,26 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, margin: 'auto', padding: 6 }}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        maxWidth: 400,
+        margin: 'auto',
+        padding: 6,
+        background: 'linear-gradient(180deg, #051A3F 0%, #091E43 100%)', // degradê azul
+        borderRadius: 3,
+        boxShadow: '0 0 15px rgba(255, 87, 34, 0.5)', // sombra laranja suave
+        color: 'white',
+        mt: 8,
+      }}
+    >
+
       <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 3 }}>
-        <IconButton onClick={handleGoBack} sx={{ marginRight: 8, color: 'black' }}>
+        <IconButton onClick={handleGoBack} sx={{ marginRight: 8, color: 'white' }}>
           <ArrowBack />
         </IconButton>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h4" component="h1" sx={{ color: 'white' }}>
           Login
         </Typography>
       </Box>
@@ -67,6 +81,12 @@ const LoginForm: React.FC = () => {
         onChange={(e) => setEmailOrUsername(e.target.value)}
         error={!!error}
         helperText={error && 'Please enter a valid email or username'}
+        inputProps={{
+          sx: {
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: 1,
+          },
+        }}
       />
 
       <FormInput
@@ -76,6 +96,12 @@ const LoginForm: React.FC = () => {
         onChange={(e) => setPassword(e.target.value)}
         error={!!error}
         helperText={error && 'Incorrect password'}
+        inputProps={{
+          sx: {
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: 1,
+          },
+        }}
       />
 
       <FormControlLabel
@@ -83,20 +109,36 @@ const LoginForm: React.FC = () => {
           <Checkbox
             checked={showPassword}
             onChange={handleTogglePasswordVisibility}
-            color="primary"
+            sx={{ color: 'white' }}
+            color="warning" // laranja
           />
         }
-        label="Show Password"
+        label={<Typography sx={{ color: 'white' }}>Show Password</Typography>}
       />
 
-      <Button fullWidth variant="contained" type="submit" disabled={loading} sx={{ marginTop: 2 }}>
-        {loading ? <CircularProgress size={24} /> : 'Sign In'}
+      <Button
+        fullWidth
+        variant="contained"
+        type="submit"
+        disabled={loading}
+        sx={{
+          marginTop: 2,
+          backgroundColor: '#ff5722',
+          '&:hover': { backgroundColor: '#e64a19' },
+          color: 'white',
+          fontWeight: 'bold',
+        }}
+      >
+        {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Sign In'}
       </Button>
 
-      <Divider sx={{ marginY: 2 }}>or</Divider>
+      <Divider sx={{ marginY: 2, borderColor: 'rgba(255, 255, 255, 0.5)' }}>or</Divider>
 
-      <Typography align="center">
-        Don't have an account? <a href="/register">Sign Up</a>
+      <Typography align="center" sx={{ color: 'white' }}>
+        Don't have an account?{' '}
+        <a href="/register" style={{ color: '#ff5722', fontWeight: 'bold', textDecoration: 'none' }}>
+          Sign Up
+        </a>
       </Typography>
     </Box>
   );

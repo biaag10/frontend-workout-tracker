@@ -1,11 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, CircularProgress, Box, Typography, Divider, Checkbox, FormControlLabel } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Box,
+  Typography,
+  Divider,
+  Checkbox,
+  FormControlLabel,
+} from '@mui/material';
 import { useRouter } from 'next/navigation';
 import FormInput from '../Login/FormInput';
 import { registerUser } from '../../app/register/actions/index';
-import { notifySuccess, notifyError } from '../toasts/index'; // ajuste o caminho se necessário
+import { notifySuccess, notifyError } from '../toasts/index';
 
 const SignUpForm = () => {
   const [name, setName] = useState('');
@@ -14,7 +22,7 @@ const SignUpForm = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const router = useRouter();
 
   // Regex para validação da senha: no mínimo 8 caracteres, 1 maiúscula, 1 caractere especial
@@ -34,7 +42,9 @@ const SignUpForm = () => {
       return false;
     }
     if (!passwordPattern.test(password)) {
-      notifyError('Password must be at least 8 characters long, contain 1 uppercase letter and 1 special character');
+      notifyError(
+        'Password must be at least 8 characters long, contain 1 uppercase letter and 1 special character'
+      );
       return false;
     }
     return true;
@@ -48,15 +58,14 @@ const SignUpForm = () => {
 
     try {
       const result = await registerUser(name, username, email, password);
-      
+
       if (result) {
         notifySuccess('User registered successfully!');
         router.push('/workouts');
       }
     } catch (err: any) {
       const message = err.message || 'An error occurred. Please try again.';
-      
-      // Mensagens específicas para feedback
+
       if (message.toLowerCase().includes('email')) {
         notifyError('Email already exists.');
       } else if (message.toLowerCase().includes('username')) {
@@ -74,8 +83,21 @@ const SignUpForm = () => {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, margin: 'auto', padding: 3 }}>
-      <Typography variant="h4" align="center" gutterBottom>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        maxWidth: 400,
+        margin: 'auto',
+        padding: 6,
+        background: 'linear-gradient(180deg, #051A3F 0%, #091E43 100%)',
+        borderRadius: 3,
+        boxShadow: '0 0 15px rgba(255, 87, 34, 0.5)',
+        color: 'white',
+        mt: 8,
+      }}
+    >
+      <Typography variant="h4" align="center" gutterBottom sx={{ color: 'white' }}>
         Sign Up
       </Typography>
 
@@ -84,6 +106,12 @@ const SignUpForm = () => {
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
+        inputProps={{
+          sx: {
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: 1,
+          },
+        }}
       />
 
       <FormInput
@@ -91,6 +119,12 @@ const SignUpForm = () => {
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
+        inputProps={{
+          sx: {
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: 1,
+          },
+        }}
       />
 
       <FormInput
@@ -98,6 +132,12 @@ const SignUpForm = () => {
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        inputProps={{
+          sx: {
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: 1,
+          },
+        }}
       />
 
       <FormInput
@@ -105,7 +145,12 @@ const SignUpForm = () => {
         type={showPassword ? 'text' : 'password'}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        // required
+        inputProps={{
+          sx: {
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: 1,
+          },
+        }}
       />
 
       <FormControlLabel
@@ -113,20 +158,40 @@ const SignUpForm = () => {
           <Checkbox
             checked={showPassword}
             onChange={handleTogglePasswordVisibility}
-            color="primary"
+            sx={{
+              color: 'white',
+              '&.Mui-checked': {
+                color: '#ff5722',
+              },
+            }}
           />
         }
-        label="Show Password"
+        label={<Typography sx={{ color: 'white' }}>Show Password</Typography>}
       />
 
-      <Button fullWidth variant="contained" type="submit" disabled={loading} sx={{ marginTop: 2 }}>
-        {loading ? <CircularProgress size={24} /> : 'Sign Up'}
+      <Button
+        fullWidth
+        variant="contained"
+        type="submit"
+        disabled={loading}
+        sx={{
+          marginTop: 2,
+          backgroundColor: '#ff5722',
+          '&:hover': { backgroundColor: '#e64a19' },
+          color: 'white',
+          fontWeight: 'bold',
+        }}
+      >
+        {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Sign Up'}
       </Button>
 
-      <Divider sx={{ marginY: 2 }}>or</Divider>
+      <Divider sx={{ marginY: 2, borderColor: 'rgba(255, 255, 255, 0.5)' }}>or</Divider>
 
-      <Typography align="center">
-        Already have an account? <a href="/login">Login</a>
+      <Typography align="center" sx={{ color: 'white' }}>
+        Already have an account?{' '}
+        <a href="/login" style={{ color: '#ff5722', fontWeight: 'bold', textDecoration: 'none' }}>
+          Login
+        </a>
       </Typography>
     </Box>
   );

@@ -15,7 +15,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { Delete, Edit, ArrowBack } from '@mui/icons-material';
 import { getAllWorkouts ,updateWorkout, deleteWorkout } from '../../app/workouts/actions/index';
-import { notifySuccess, notifyError } from '../toasts/index'; 
+import { notifySuccess, notifyError } from '../toasts/index';
 
 const WorkoutsPage: React.FC = () => {
   const [workouts, setWorkouts] = useState<any[]>([]);
@@ -26,20 +26,19 @@ const WorkoutsPage: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-  const fetchWorkouts = async () => {
-    try {
-      const data = await getAllWorkouts(); 
-      setWorkouts(data);
-    } catch (err) {
-      notifyError('An error occurred while fetching workouts');
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchWorkouts = async () => {
+      try {
+        const data = await getAllWorkouts();
+        setWorkouts(data);
+      } catch (err) {
+        notifyError('An error occurred while fetching workouts');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchWorkouts();
-}, []);
-
+    fetchWorkouts();
+  }, []);
 
   const handleEdit = (workout: any) => {
     setEditingWorkout(workout);
@@ -110,13 +109,24 @@ const WorkoutsPage: React.FC = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 800, margin: 'auto', padding: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-        <IconButton onClick={handleGoBack} sx={{ color: 'black' }}>
+    <Box
+      sx={{
+        maxWidth: 800,
+        margin: 'auto',
+        padding: 6,
+        background: 'linear-gradient(180deg, #051A3F 0%, #091E43 100%)',
+        borderRadius: 3,
+        boxShadow: '0 0 15px rgba(255, 87, 34, 0.5)',
+        color: 'white',
+        mt: 8,
+      }}
+    >
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 3 }}>
+        <IconButton onClick={handleGoBack} sx={{ color: 'white' }}>
           <ArrowBack />
         </IconButton>
 
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
           Your Workouts
         </Typography>
 
@@ -126,7 +136,7 @@ const WorkoutsPage: React.FC = () => {
           sx={{
             fontSize: '10px',
             padding: '4px 8px',
-            backgroundColor: 'red',
+            backgroundColor: '#ff5722',
             color: 'white',
             '&:hover': { backgroundColor: '#d32f2f' },
           }}
@@ -136,20 +146,28 @@ const WorkoutsPage: React.FC = () => {
       </Box>
 
       {loading ? (
-        <CircularProgress />
+        <CircularProgress sx={{ color: 'white' }} />
       ) : (
         <List>
           {workouts.map((workout) => (
             <ListItem key={workout._id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <ListItemText
-                primary={workout.title}
-                secondary={`Created at: ${new Date(workout.createdAt).toLocaleString()}`}
+                primary={
+                  <Typography sx={{ color: 'white', fontWeight: 'bold' }}>
+                    {workout.title}
+                  </Typography>
+                }
+                secondary={
+                  <Typography sx={{ color: 'rgba(255,255,255,0.7)' }}>
+                    Created at: {new Date(workout.createdAt).toLocaleString()}
+                  </Typography>
+                }
               />
               <Box>
-                <IconButton onClick={() => handleEdit(workout)}>
+                <IconButton onClick={() => handleEdit(workout)} sx={{ color: 'white' }}>
                   <Edit />
                 </IconButton>
-                <IconButton onClick={() => handleDelete(workout._id)}>
+                <IconButton onClick={() => handleDelete(workout._id)} sx={{ color: 'white' }}>
                   <Delete />
                 </IconButton>
               </Box>
@@ -160,7 +178,7 @@ const WorkoutsPage: React.FC = () => {
 
       {editingWorkout && (
         <Box sx={{ marginTop: 4 }}>
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h5" gutterBottom sx={{ color: 'white' }}>
             Edit Workout: {editingWorkout.title}
           </Typography>
           <TextField
@@ -169,11 +187,17 @@ const WorkoutsPage: React.FC = () => {
             fullWidth
             value={updatedTitle}
             onChange={(e) => setUpdatedTitle(e.target.value)}
-            sx={{ marginBottom: 2 }}
+            sx={{
+              marginBottom: 2,
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              borderRadius: 1,
+              '& label': { color: 'black' },
+              '& input': { color: 'black' },
+            }}
           />
 
           {updatedExercises.map((exercise, index) => (
-            <Box key={index} sx={{ marginBottom: 2 }}>
+            <Box key={index} sx={{ marginBottom: 3 }}>
               <TextField
                 label={`Exercise ${index + 1} Name`}
                 variant="outlined"
@@ -181,7 +205,13 @@ const WorkoutsPage: React.FC = () => {
                 value={exercise.name}
                 onChange={(e) => handleUpdateExerciseName(index, e.target.value)}
                 required
-                sx={{ marginBottom: 1 }}
+                sx={{
+                  marginBottom: 1,
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  borderRadius: 1,
+                  '& label': { color: 'black' },
+                  '& input': { color: 'black' },
+                }}
               />
 
               {exercise.series.map((set: { reps: number; weight: number }, setIndex: number) => (
@@ -194,6 +224,12 @@ const WorkoutsPage: React.FC = () => {
                     onChange={(e) => handleUpdateSeries(index, setIndex, 'reps', parseInt(e.target.value))}
                     required
                     fullWidth
+                    sx={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      borderRadius: 1,
+                      '& label': { color: 'black' },
+                      '& input': { color: 'black' },
+                    }}
                   />
                   <TextField
                     label={`Set ${setIndex + 1} Weight`}
@@ -203,20 +239,55 @@ const WorkoutsPage: React.FC = () => {
                     onChange={(e) => handleUpdateSeries(index, setIndex, 'weight', parseInt(e.target.value))}
                     required
                     fullWidth
+                    sx={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      borderRadius: 1,
+                      '& label': { color: 'black' },
+                      '& input': { color: 'black' },
+                    }}
                   />
                 </Box>
               ))}
-              <Button variant="outlined" onClick={() => handleAddSeriesToUpdate(index)} sx={{ width: '100%' }}>
+              <Button
+                variant="outlined"
+                onClick={() => handleAddSeriesToUpdate(index)}
+                sx={{
+                  width: '100%',
+                  color: 'white',
+                  borderColor: 'white',
+                  '&:hover': { borderColor: '#ff5722', color: '#ff5722' },
+                }}
+              >
                 Add Set
               </Button>
             </Box>
           ))}
 
-          <Button variant="outlined" onClick={handleAddExerciseToUpdate} sx={{ width: '100%' }}>
+          <Button
+            variant="outlined"
+            onClick={handleAddExerciseToUpdate}
+            sx={{
+              width: '100%',
+              color: 'white',
+              borderColor: 'white',
+              '&:hover': { borderColor: '#ff5722', color: '#ff5722' },
+            }}
+          >
             Add Exercise
           </Button>
 
-          <Button fullWidth variant="contained" onClick={handleUpdateWorkout} sx={{ marginTop: 2 }}>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={handleUpdateWorkout}
+            sx={{
+              marginTop: 2,
+              backgroundColor: '#ff5722',
+              '&:hover': { backgroundColor: '#d32f2f' },
+              color: 'white',
+              fontWeight: 'bold',
+            }}
+          >
             Update Workout
           </Button>
         </Box>

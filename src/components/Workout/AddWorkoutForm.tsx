@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Button, CircularProgress, Box, Typography, TextField } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { notifySuccess, notifyError } from '../toasts/index'; // ajuste o caminho conforme o seu projeto
+import { notifySuccess, notifyError } from '../toasts/index'; // ajuste o caminho conforme seu projeto
 import { createWorkout } from '../../app/workouts/actions/index'; // importa a função centralizada
 
 const AddWorkoutForm: React.FC = () => {
@@ -45,7 +45,6 @@ const AddWorkoutForm: React.FC = () => {
     setLoading(true);
 
     try {
-      // Usando a função centralizada para criar treino
       await createWorkout(workoutTitle, exercises);
       notifySuccess('Workout added successfully!');
       setWorkoutTitle('');
@@ -59,9 +58,22 @@ const AddWorkoutForm: React.FC = () => {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600, margin: 'auto', padding: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-        <Typography variant="h4" gutterBottom>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        maxWidth: 600,
+        margin: 'auto',
+        padding: 6,
+        background: 'linear-gradient(180deg, #051A3F 0%, #091E43 100%)', // degradê azul
+        borderRadius: 3,
+        boxShadow: '0 0 15px rgba(255, 87, 34, 0.5)', // sombra laranja suave
+        color: 'white',
+        mt: 8,
+      }}
+    >
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 3 }}>
+        <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
           Add New Workout
         </Typography>
 
@@ -74,9 +86,9 @@ const AddWorkoutForm: React.FC = () => {
           }}
           sx={{
             fontSize: '10px',
+            marginBottom: 2,
             padding: '4px 8px',
-            marginBottom: '14px',
-            backgroundColor: 'red',
+            backgroundColor: '#ff5722',
             color: 'white',
             '&:hover': { backgroundColor: '#d32f2f' },
           }}
@@ -92,15 +104,21 @@ const AddWorkoutForm: React.FC = () => {
         value={workoutTitle}
         onChange={(e) => setWorkoutTitle(e.target.value)}
         required
-        sx={{ marginBottom: 2 }}
+        sx={{
+          marginBottom: 2,
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          borderRadius: 1,
+          '& label': { color: 'black' }, // label preto para contraste
+          '& input': { color: 'black' }, // texto preto no input
+        }}
       />
 
       <Box sx={{ marginBottom: 2 }}>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
           Exercises
         </Typography>
         {exercises.map((exercise, index) => (
-          <Box key={index} sx={{ marginBottom: 2 }}>
+          <Box key={index} sx={{ marginBottom: 3 }}>
             <TextField
               label={`Exercise ${index + 1} Name`}
               variant="outlined"
@@ -108,7 +126,13 @@ const AddWorkoutForm: React.FC = () => {
               value={exercise.name}
               onChange={(e) => handleExerciseNameChange(index, e.target.value)}
               required
-              sx={{ marginBottom: 1 }}
+              sx={{
+                marginBottom: 1,
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                borderRadius: 1,
+                '& label': { color: 'black' },
+                '& input': { color: 'black' },
+              }}
             />
             {exercise.series.map((set, setIndex) => (
               <Box key={setIndex} sx={{ display: 'flex', gap: 2, marginBottom: 1 }}>
@@ -120,6 +144,12 @@ const AddWorkoutForm: React.FC = () => {
                   onChange={(e) => handleSeriesChange(index, setIndex, 'reps', parseInt(e.target.value))}
                   required
                   fullWidth
+                  sx={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    borderRadius: 1,
+                    '& label': { color: 'black' },
+                    '& input': { color: 'black' },
+                  }}
                 />
                 <TextField
                   label={`Set ${setIndex + 1} Weight`}
@@ -129,6 +159,12 @@ const AddWorkoutForm: React.FC = () => {
                   onChange={(e) => handleSeriesChange(index, setIndex, 'weight', parseInt(e.target.value))}
                   required
                   fullWidth
+                  sx={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    borderRadius: 1,
+                    '& label': { color: 'black' },
+                    '& input': { color: 'black' },
+                  }}
                 />
               </Box>
             ))}
@@ -137,17 +173,38 @@ const AddWorkoutForm: React.FC = () => {
             </Button>
           </Box>
         ))}
-
-        <Button variant="outlined" onClick={handleAddExercise} sx={{ width: '100%' }}>
+        <Button variant="outlined" onClick={handleAddExercise} sx={{ width: '100%', color: 'white', borderColor: 'white', '&:hover': { borderColor: '#ff5722', color: '#ff5722' } }}>
           Add Exercise
         </Button>
       </Box>
 
-      <Button fullWidth variant="contained" type="submit" disabled={loading} sx={{ marginTop: 2 }}>
-        {loading ? <CircularProgress size={24} /> : 'Add Workout'}
+      <Button
+        fullWidth
+        variant="contained"
+        type="submit"
+        disabled={loading}
+        sx={{
+          marginTop: 2,
+          backgroundColor: '#ff5722',
+          '&:hover': { backgroundColor: '#e64a19' },
+          color: 'white',
+          fontWeight: 'bold',
+        }}
+      >
+        {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Add Workout'}
       </Button>
 
-      <Button variant="outlined" onClick={() => router.push('/workouts/workouts-all')} sx={{ width: '100%', marginTop: 2 }}>
+      <Button
+        variant="outlined"
+        onClick={() => router.push('/workouts/workouts-all')}
+        sx={{
+          width: '100%',
+          marginTop: 2,
+          color: 'white',
+          borderColor: 'white',
+          '&:hover': { borderColor: '#ff5722', color: '#ff5722' },
+        }}
+      >
         View Workouts
       </Button>
     </Box>

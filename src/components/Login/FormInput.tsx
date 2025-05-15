@@ -9,13 +9,29 @@ interface FormInputProps {
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   error?: boolean;
   helperText?: string;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement> & { sx?: object };
+  // Remova InputLabelProps porque não está usando TextField.label
 }
 
-const FormInput: React.FC<FormInputProps> = ({ label, error, helperText, ...props }) => {
+const FormInput: React.FC<FormInputProps> = ({ label, error, helperText, inputProps, ...props }) => {
   return (
     <FormControl fullWidth margin="normal" required>
-      <FormLabel>{label}</FormLabel>
-      <TextField {...props} error={error} helperText={helperText} variant="outlined" fullWidth />
+      <FormLabel sx={{ color: 'white' }}>{label}</FormLabel> {/* label branco */}
+      <TextField
+        {...props}
+        error={error}
+        helperText={helperText}
+        variant="outlined"
+        fullWidth
+        inputProps={{
+          ...inputProps,
+          sx: {
+            ...(inputProps?.sx || {}),
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: 1,
+          },
+        }}
+      />
     </FormControl>
   );
 };
