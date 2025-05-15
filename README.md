@@ -13,7 +13,7 @@ https://drive.google.com/file/d/1bhnyof1i9SSVSS4Cym3LKT3tmtTedSfJ/view?usp=shari
 
 - npm ou yarn
 
-## Backend funcionando e configurado (verificar URL da API no .env.local)
+## Backend funcionando e configurado (verificar URL do cors que está configurado no back (deve ser o link do front) e no front deve ter o caminho do back)
 
 ### Clone este repositório:
 
