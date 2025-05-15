@@ -6,7 +6,7 @@ import AddWorkoutForm from '../../components/Workout/AddWorkoutForm';
 const AddWorkoutPage: React.FC = () => {
   return (
     <div>
-      {/* <ProtectedRoute /> */}
+      <ProtectedRoute />
       <AddWorkoutForm />
     </div>
   );

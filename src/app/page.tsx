@@ -36,7 +36,7 @@ const Home: React.FC = () => {
         justifyContent: isSmallScreen ? 'center' : 'flex-end',
         alignItems: 'center',
         flexDirection: isSmallScreen ? 'column' : 'row',
-        padding: isSmallScreen ? '1rem' : '0 12rem 0 2rem',
+        padding: isSmallScreen ? '1rem' : '0 17rem 0 2rem',
       }}
     >
       {/* Container da imagem */}
@@ -65,7 +65,7 @@ const Home: React.FC = () => {
       <Box
         sx={{
           marginTop: isSmallScreen ? 3 : 0,
-          marginLeft: isSmallScreen ? 0 : 4,
+          marginLeft: isSmallScreen ? 0 : 10,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
