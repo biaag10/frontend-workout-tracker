@@ -10,7 +10,6 @@ interface FormInputProps {
   error?: boolean;
   helperText?: string;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement> & { sx?: object };
-  // Remova InputLabelProps porque não está usando TextField.label
 }
 
 const FormInput: React.FC<FormInputProps> = ({ label, error, helperText, inputProps, ...props }) => {

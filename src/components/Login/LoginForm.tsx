@@ -26,14 +26,14 @@ const LoginForm: React.FC = () => {
       const result = await loginUser(emailOrUsername, password);
 
       if (result.success) {
-        notifySuccess('Login realizado com sucesso!');
+        notifySuccess('Login successful!');
         router.push('/workouts');
       } else {
         setError(result.message);
-        notifyError(result.message || 'Erro no login');
+        notifyError(result.message || 'Login error.');
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erro inesperado';
+      const message = err instanceof Error ? err.message : 'Unexpected error. Please try again.';
       setError(message);
       notifyError(message);
     } finally {

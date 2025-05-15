@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { Button, CircularProgress, Box, Typography, TextField } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { notifySuccess, notifyError } from '../toasts/index'; // ajuste o caminho conforme seu projeto
-import { createWorkout } from '../../app/workouts/actions/index'; // importa a função centralizada
+import { notifySuccess, notifyError } from '../toasts/index'; 
+import { createWorkout } from '../../app/workouts/actions/index'; 
 
 const AddWorkoutForm: React.FC = () => {
   const [workoutTitle, setWorkoutTitle] = useState('');
@@ -108,8 +108,8 @@ const AddWorkoutForm: React.FC = () => {
           marginBottom: 2,
           backgroundColor: 'rgba(255, 255, 255, 0.9)',
           borderRadius: 1,
-          '& label': { color: 'black' }, // label preto para contraste
-          '& input': { color: 'black' }, // texto preto no input
+          '& label': { color: 'black' }, // label preto 
+          '& input': { color: 'black' }, // texto preto 
         }}
       />
 

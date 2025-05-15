@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { Delete, Edit, ArrowBack } from '@mui/icons-material';
-import { getAllWorkouts ,updateWorkout, deleteWorkout } from '../../app/workouts/actions/index';
+import { getAllWorkouts, updateWorkout, deleteWorkout } from '../../app/workouts/actions/index';
 import { notifySuccess, notifyError } from '../toasts/index';
 
 const WorkoutsPage: React.FC = () => {
@@ -31,7 +31,7 @@ const WorkoutsPage: React.FC = () => {
         const data = await getAllWorkouts();
         setWorkouts(data);
       } catch (err) {
-        notifyError('An error occurred while fetching workouts');
+        notifyError('An error occurred while fetching workouts.');
       } finally {
         setLoading(false);
       }
@@ -134,6 +134,7 @@ const WorkoutsPage: React.FC = () => {
           variant="outlined"
           onClick={handleLogout}
           sx={{
+            marginBottom: 1,
             fontSize: '10px',
             padding: '4px 8px',
             backgroundColor: '#ff5722',
@@ -276,20 +277,34 @@ const WorkoutsPage: React.FC = () => {
             Add Exercise
           </Button>
 
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={handleUpdateWorkout}
-            sx={{
-              marginTop: 2,
-              backgroundColor: '#ff5722',
-              '&:hover': { backgroundColor: '#d32f2f' },
-              color: 'white',
-              fontWeight: 'bold',
-            }}
-          >
-            Update Workout
-          </Button>
+          <Box sx={{ display: 'flex', gap: 2, marginTop: 2 }}>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleUpdateWorkout}
+              sx={{
+                backgroundColor: '#ff5722',
+                '&:hover': { backgroundColor: '#d32f2f' },
+                color: 'white',
+                fontWeight: 'bold',
+              }}
+            >
+              Update Workout
+            </Button>
+
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => setEditingWorkout(null)}
+              sx={{
+                color: 'white',
+                borderColor: 'white',
+                '&:hover': { borderColor: '#ff5722', color: '#ff5722' },
+              }}
+            >
+              Cancel
+            </Button>
+          </Box>
         </Box>
       )}
     </Box>

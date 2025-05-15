@@ -25,25 +25,25 @@ const SignUpForm = () => {
 
   const router = useRouter();
 
-  // Regex para validação da senha: no mínimo 8 caracteres, 1 maiúscula, 1 caractere especial
+  // regex para validação da senha: no mínimo 8 caracteres, 1 maiúscula, 1 caractere especial
   const passwordPattern = /^(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
 
   const validateFields = () => {
     if (!name.trim()) {
-      notifyError('Name is required');
+      notifyError('Name is required.');
       return false;
     }
     if (!username.trim()) {
-      notifyError('Username is required');
+      notifyError('Username is required.');
       return false;
     }
     if (!email.trim()) {
-      notifyError('Email is required');
+      notifyError('Email is required.');
       return false;
     }
     if (!passwordPattern.test(password)) {
       notifyError(
-        'Password must be at least 8 characters long, contain 1 uppercase letter and 1 special character'
+        'Password must be at least 8 characters long, contain 1 uppercase letter and 1 special character.'
       );
       return false;
     }
