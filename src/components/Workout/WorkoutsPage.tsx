@@ -178,7 +178,7 @@ const WorkoutsPage: React.FC = () => {
       )}
 
       {editingWorkout && (
-        <Box sx={{ marginTop: 4, marginBottom: 4 }}>
+        <Box sx={{ marginTop: 4, paddingBottom: 4 }}>
           <Typography variant="h5" gutterBottom sx={{ color: 'white' }}>
             Edit Workout: {editingWorkout.title}
           </Typography>
