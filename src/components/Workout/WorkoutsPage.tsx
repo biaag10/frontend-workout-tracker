@@ -188,7 +188,7 @@ const WorkoutsPage: React.FC = () => {
                 sx={{ marginBottom: 1 }}
               />
 
-              {exercise.series.map((set, setIndex) => (
+              {exercise.series.map((set: { reps: number; weight: number }, setIndex: number) => (
                 <Box key={setIndex} sx={{ display: 'flex', gap: 2, marginBottom: 1 }}>
                   <TextField
                     label={`Set ${setIndex + 1} Reps`}
