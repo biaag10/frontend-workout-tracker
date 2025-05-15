@@ -1,72 +1,95 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Button, Box, Typography } from '@mui/material';
+import { Button, Box, Typography, useTheme, useMediaQuery } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image'; // Importando o componente de imagem do Next.js
+import Image from 'next/image';
 
 const Home: React.FC = () => {
-  const [isClient, setIsClient] = useState(false); // Para garantir que o código rode no cliente
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+  const theme = useTheme();
+
+  // se a tela é pequena ou média
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));    // <600px
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md')); // entre 600px e 900px
 
   useEffect(() => {
-    setIsClient(true); // Após a montagem do componente no cliente, marcamos que é o cliente
+    setIsClient(true);
   }, []);
 
   const handleButtonClick = () => {
-    router.push('/login');  // Redireciona para a tela de login
+    router.push('/login');
   };
 
-  if (!isClient) {
-    return null; // Não renderiza nada no lado do servidor
-  }
+  if (!isClient) return null;
 
   return (
     <Box
       sx={{
         position: 'relative',
         height: '100vh',
+        width: '100vw',
+        overflow: 'hidden',
+        background: `linear-gradient(180deg, #051A3F 0%, #091E43 100%)`, // degrade suave parecido com a imagem
         display: 'flex',
-        justifyContent: 'flex-end',  // Alinha o conteúdo à direita
-        alignItems: 'center',  // Alinha o conteúdo verticalmente ao centro
-        paddingRight: '6rem',  // Distância da borda direita
-        paddingLeft: '2rem',
+        justifyContent: isSmallScreen ? 'center' : 'flex-end',
+        alignItems: 'center',
+        flexDirection: isSmallScreen ? 'column' : 'row',
+        padding: isSmallScreen ? '1rem' : '0 12rem 0 2rem',
       }}
     >
-      {/* Adicionando o componente de imagem do Next.js */}
-      <Image
-        src="/images/background-login.png"  // Caminho da imagem dentro da pasta public
-        alt="No Pain No Gain"
-        layout="fill"  // Preenche toda a área do container
-        objectFit="cover"  // Faz a imagem cobrir toda a área
-        priority={true}  // A imagem será carregada imediatamente
-        quality={100}  // Qualidade da imagem
-      />
-
+      {/* Container da imagem */}
       <Box
         sx={{
-          position: 'absolute', // Coloca o conteúdo sobre a imagem
+          position: 'relative',
+          flexShrink: 0,
+          width: isSmallScreen ? '90vw' : isMediumScreen ? '50vw' : '40vw',
+          height: isSmallScreen ? '40vh' : isMediumScreen ? '60vh' : '80vh',
+          borderRadius: 4,
+          overflow: 'hidden',
+          boxShadow: '0 0 30px rgba(0,0,0,0.5)', // sombra suave para destacar
+        }}
+      >
+        <Image
+          src={'/images/background-home-celular.png'}
+          alt="No Pain No Gain"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+          quality={100}
+        />
+      </Box>
+
+      {/* Texto + botão */}
+      <Box
+        sx={{
+          marginTop: isSmallScreen ? 3 : 0,
+          marginLeft: isSmallScreen ? 0 : 4,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          alignItems: 'center',
-          gap: '2rem',
+          alignItems: isSmallScreen ? 'center' : 'flex-start',
+          gap: 2,
+          width: isSmallScreen ? '100%' : 'auto',
+          color: 'white',
+          textAlign: isSmallScreen ? 'center' : 'left',
         }}
       >
-        <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
+        <Typography variant={isSmallScreen ? 'h5' : 'h4'} fontWeight="bold">
           Let's Get Started
         </Typography>
         <Button
           variant="contained"
           color="primary"
-          sx={{
-            padding: '10px 20px',
-            backgroundColor: '#ff5722',  // Cor de fundo do botão
-            '&:hover': {
-              backgroundColor: '#e64a19',  // Cor ao passar o mouse
-            },
-          }}
           onClick={handleButtonClick}
+          sx={{
+            padding: '12px 24px',
+            backgroundColor: '#ff5722',
+            '&:hover': { backgroundColor: '#e64a19' },
+            width: isSmallScreen ? '100%' : 'auto',
+            fontSize: isSmallScreen ? '1rem' : '1.25rem',
+          }}
         >
           Get Started
         </Button>
