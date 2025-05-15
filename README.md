@@ -1,3 +1,48 @@
+# Atividade Avaliativa IV.Final: Telas de Cadastro/Login/Área logada integradas ao backend
+
+# front-WorkoutTracker
+O WorkoutTracker é uma aplicação web que permite aos usuários registrar, visualizar e gerenciar seus treinos de forma prática e organizada. Com o objetivo de facilitar o acompanhamento de atividades físicas, o sistema permite que os usuários registrem o título do treino, os exercícios realizados, as séries, as repetições e o peso utilizado. 
+
+# Link do Vídeo Demonstrativo
+https://drive.google.com/file/d/1bhnyof1i9SSVSS4Cym3LKT3tmtTedSfJ/view?usp=sharing
+
+## Como Rodar o Projeto
+
+- Pré-requisitos
+- Node.js v18 ou superior
+
+- npm ou yarn
+
+## Backend funcionando e configurado (verificar URL da API no .env.local)
+
+### Clone este repositório:
+
+```bash
+    git clone https://github.com/biaag10/frontend-workout-tracker.git
+    cd frontend-workout-tracker
+```
+
+### Instale as dependências:
+```bash
+    npm install
+    # ou
+    yarn install
+```
+
+### Inicie o projeto em modo de desenvolvimento:
+```bash
+    npm run dev
+    # ou
+    yarn dev
+```
+
+### Abra o navegador no endereço:
+- http://localhost:3000 
+
+### Link do Vercel:
+frontend-workout-tracker.vercel.app
+
+#####################################
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -34,6 +79,3 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-# front-WorkoutTracker
-O WorkoutTracker é uma aplicação web que permite aos usuários registrar, visualizar e gerenciar seus treinos de forma prática e organizada. Com o objetivo de facilitar o acompanhamento de atividades físicas, o sistema permite que os usuários registrem o título do treino, os exercícios realizados, as séries, as repetições e o peso utilizado. 
