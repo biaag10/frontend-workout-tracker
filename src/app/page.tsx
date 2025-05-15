@@ -1,67 +1,78 @@
 'use client';
 
-import Image from "next/image";
-import Link from "next/link";
+import React, { useEffect, useState } from 'react';
+import { Button, Box, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image'; // Importando o componente de imagem do Next.js
 
-export default function Home() {
+const Home: React.FC = () => {
+  const [isClient, setIsClient] = useState(false); // Para garantir que o código rode no cliente
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true); // Após a montagem do componente no cliente, marcamos que é o cliente
+  }, []);
+
+  const handleButtonClick = () => {
+    router.push('/login');  // Redireciona para a tela de login
+  };
+
+  if (!isClient) {
+    return null; // Não renderiza nada no lado do servidor
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <h1 className="text-3xl font-bold text-center sm:text-left mb-6">Bem-vindo ao TreinoTracker!</h1>
+    <Box
+      sx={{
+        position: 'relative',
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'flex-end',  // Alinha o conteúdo à direita
+        alignItems: 'center',  // Alinha o conteúdo verticalmente ao centro
+        paddingRight: '6rem',  // Distância da borda direita
+        paddingLeft: '2rem',
+      }}
+    >
+      {/* Adicionando o componente de imagem do Next.js */}
+      <Image
+        src="/images/background-login.png"  // Caminho da imagem dentro da pasta public
+        alt="No Pain No Gain"
+        layout="fill"  // Preenche toda a área do container
+        objectFit="cover"  // Faz a imagem cobrir toda a área
+        priority={true}  // A imagem será carregada imediatamente
+        quality={100}  // Qualidade da imagem
+      />
 
-        <p className="text-lg text-center sm:text-left mb-4">
-          O aplicativo para registro de seus treinos e acompanhamento de progresso.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-          <Link 
-            href="/register" 
-            className="bg-blue-500 text-white py-3 px-6 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
-          >
-            Cadastro
-          </Link>
-
-          <Link 
-            href="/login" 
-            className="bg-blue-500 text-white py-3 px-6 rounded-md shadow-md"
-          >
-            Login
-          </Link>
-
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        {/* <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/docs"
-          target="_blank"
-          rel="noopener noreferrer"
+      <Box
+        sx={{
+          position: 'absolute', // Coloca o conteúdo sobre a imagem
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '2rem',
+        }}
+      >
+        <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
+          Let's Get Started
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{
+            padding: '10px 20px',
+            backgroundColor: '#ff5722',  // Cor de fundo do botão
+            '&:hover': {
+              backgroundColor: '#e64a19',  // Cor ao passar o mouse
+            },
+          }}
+          onClick={handleButtonClick}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn Next.js
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a> */}
-      </footer>
-    </div>
+          Get Started
+        </Button>
+      </Box>
+    </Box>
   );
-}
+};
+
+export default Home;

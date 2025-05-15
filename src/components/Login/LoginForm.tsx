@@ -1,45 +1,56 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, CircularProgress, Box, Typography, Divider, Checkbox, FormControlLabel } from '@mui/material';
-import { useRouter } from 'next/navigation'; // Agora irá funcionar corretamente
+import { Button, CircularProgress, Box, Typography, Divider, Checkbox, FormControlLabel, IconButton } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import FormInput from './FormInput';
-import { loginUser } from '../../app/login/actions/index'; // Importa a função loginUser
+import { loginUser } from '../../app/login/actions/index';
+import { ArrowBack } from '@mui/icons-material';
 
 const LoginForm: React.FC = () => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [showPassword, setShowPassword] = useState(false);  // Adicionando estado para mostrar/esconder a senha
+  const [showPassword, setShowPassword] = useState(false);
 
-  const router = useRouter(); // Usando 'useRouter' para redirecionamento
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    const result = await loginUser(emailOrUsername, password); // Chama a função de login da pasta actions
+    const result = await loginUser(emailOrUsername, password);
 
     if (result.success) {
-      router.push('/workouts'); // Redireciona para a área logada
+      router.push('/workouts');
     } else {
-      setError(result.message); // Exibe mensagem de erro
+      setError(result.message);
     }
 
     setLoading(false);
   };
 
   const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);  // Alterna a visibilidade da senha
+    setShowPassword(!showPassword);
+  };
+
+  const handleGoBack = () => {
+    router.push('/');
   };
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, margin: 'auto', padding: 6 }}>
-      <Typography variant="h4" align="center" gutterBottom>
-        Login
-      </Typography>
+      {/* container para seta + título */}
+      <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 3 }}>
+        <IconButton onClick={handleGoBack} sx={{ marginRight: 8, color: 'black' }}>
+          <ArrowBack />
+        </IconButton>
+        <Typography variant="h4" component="h1">
+          Login
+        </Typography>
+      </Box>
 
       <FormInput
         label="Email or Username"
@@ -52,7 +63,7 @@ const LoginForm: React.FC = () => {
 
       <FormInput
         label="Password"
-        type={showPassword ? 'text' : 'password'}  // Condicional para exibir ou esconder a senha
+        type={showPassword ? 'text' : 'password'}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         error={!!error}
@@ -61,10 +72,10 @@ const LoginForm: React.FC = () => {
 
       <FormControlLabel
         control={
-          <Checkbox 
-            checked={showPassword} 
-            onChange={handleTogglePasswordVisibility} 
-            color="primary" 
+          <Checkbox
+            checked={showPassword}
+            onChange={handleTogglePasswordVisibility}
+            color="primary"
           />
         }
         label="Show Password"
