@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import FormInput from './FormInput';
 import { loginUser } from '../../app/login/actions/index';
 import { ArrowBack } from '@mui/icons-material';
+import { notifySuccess, notifyError } from '../toasts/index';  // ajuste o caminho conforme o seu projeto
 
 const LoginForm: React.FC = () => {
   const [emailOrUsername, setEmailOrUsername] = useState('');
@@ -21,15 +22,23 @@ const LoginForm: React.FC = () => {
     setLoading(true);
     setError('');
 
-    const result = await loginUser(emailOrUsername, password);
+    try {
+      const result = await loginUser(emailOrUsername, password);
 
-    if (result.success) {
-      router.push('/workouts');
-    } else {
-      setError(result.message);
+      if (result.success) {
+        notifySuccess('Login realizado com sucesso!');
+        router.push('/workouts');
+      } else {
+        setError(result.message);
+        notifyError(result.message || 'Erro no login');
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro inesperado';
+      setError(message);
+      notifyError(message);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const handleTogglePasswordVisibility = () => {
@@ -42,7 +51,6 @@ const LoginForm: React.FC = () => {
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, margin: 'auto', padding: 6 }}>
-      {/* container para seta + título */}
       <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 3 }}>
         <IconButton onClick={handleGoBack} sx={{ marginRight: 8, color: 'black' }}>
           <ArrowBack />

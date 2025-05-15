@@ -1,31 +1,29 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, CircularProgress, Box, Typography, TextField, Divider } from '@mui/material';
+import { Button, CircularProgress, Box, Typography, TextField } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { notifySuccess, notifyError } from '../toasts/index'; // ajuste o caminho conforme seu projeto
 
 const AddWorkoutForm: React.FC = () => {
   const [workoutTitle, setWorkoutTitle] = useState('');
   const [exercises, setExercises] = useState<{ name: string; series: { reps: number; weight: number }[] }[]>([]);
   const [loading, setLoading] = useState(false);
-  const router = useRouter(); // Usando o router para redirecionamento após sucesso
+  const router = useRouter();
 
-  // Função para adicionar um exercício
   const handleAddExercise = () => {
     setExercises([
       ...exercises,
-      { name: '', series: [{ reps: 0, weight: 0 }] }, // Novo exercício com uma série inicial
+      { name: '', series: [{ reps: 0, weight: 0 }] },
     ]);
   };
 
-  // Função para modificar o nome do exercício
   const handleExerciseNameChange = (index: number, name: string) => {
     const updatedExercises = [...exercises];
     updatedExercises[index].name = name;
     setExercises(updatedExercises);
   };
 
-  // Função para modificar a série do exercício
   const handleSeriesChange = (exerciseIndex: number, seriesIndex: number, field: string, value: number) => {
     const updatedExercises = [...exercises];
     updatedExercises[exerciseIndex].series[seriesIndex] = {
@@ -35,14 +33,12 @@ const AddWorkoutForm: React.FC = () => {
     setExercises(updatedExercises);
   };
 
-  // Função para adicionar uma nova série ao exercício
   const handleAddSeries = (index: number) => {
     const updatedExercises = [...exercises];
     updatedExercises[index].series.push({ reps: 0, weight: 0 });
     setExercises(updatedExercises);
   };
 
-  // Enviar dados para a API
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -52,21 +48,22 @@ const AddWorkoutForm: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Usando o token do localStorage
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({ title: workoutTitle, exercises }),
       });
 
       if (response.ok) {
-        alert('Workout added successfully!');
+        notifySuccess('Workout added successfully!');
         setWorkoutTitle('');
         setExercises([]);
-        router.push('/workouts'); // Redireciona para a página de treinos
+        router.push('/workouts');
       } else {
-        alert('Error adding workout!');
+        const errorData = await response.json();
+        notifyError(errorData.message || 'Error adding workout!');
       }
     } catch (err) {
-      alert('An error occurred. Please try again.');
+      notifyError('An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -79,11 +76,11 @@ const AddWorkoutForm: React.FC = () => {
           Add New Workout
         </Typography>
 
-        {/* Botão de Logout pequeno ao lado do título */}
         <Button
           variant="outlined"
           onClick={() => {
             localStorage.removeItem('token');
+            notifySuccess('Logged out successfully!');
             router.push('/login');
           }}
           sx={{

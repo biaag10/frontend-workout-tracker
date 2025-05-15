@@ -1,15 +1,26 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, CircularProgress, List, ListItem, ListItemText, IconButton, TextField } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  TextField,
+} from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { Delete, Edit, ArrowBack } from '@mui/icons-material';  // Importa o ícone de setinha
-import { updateWorkout, deleteWorkout } from '../../app/workouts/actions/index'; 
+import { Delete, Edit, ArrowBack } from '@mui/icons-material';
+import { updateWorkout, deleteWorkout } from '../../app/workouts/actions/index';
+import { notifySuccess, notifyError } from '../toasts/index'; // Ajuste o caminho conforme seu projeto
 
 const WorkoutsPage: React.FC = () => {
   const [workouts, setWorkouts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editingWorkout, setEditingWorkout] = useState<any>(null); // Estado para controle de edição
+  const [editingWorkout, setEditingWorkout] = useState<any>(null);
   const [updatedTitle, setUpdatedTitle] = useState('');
   const [updatedExercises, setUpdatedExercises] = useState<any[]>([]);
   const router = useRouter();
@@ -20,7 +31,7 @@ const WorkoutsPage: React.FC = () => {
         const response = await fetch('http://localhost:3000/workouts/all-workouts', {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
 
@@ -28,10 +39,10 @@ const WorkoutsPage: React.FC = () => {
           const data = await response.json();
           setWorkouts(data);
         } else {
-          alert('Failed to fetch workouts');
+          notifyError('Failed to fetch workouts');
         }
       } catch (err) {
-        alert('An error occurred while fetching workouts');
+        notifyError('An error occurred while fetching workouts');
       } finally {
         setLoading(false);
       }
@@ -41,23 +52,23 @@ const WorkoutsPage: React.FC = () => {
   }, []);
 
   const handleEdit = (workout: any) => {
-    setEditingWorkout(workout);  // Set the workout data for editing
+    setEditingWorkout(workout);
     setUpdatedTitle(workout.title);
-    setUpdatedExercises(workout.exercises); // Pre-load exercises for editing
+    setUpdatedExercises(workout.exercises);
   };
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this workout?')) {
       try {
-        const response = await deleteWorkout(id); // Using deleteWorkout function
+        const response = await deleteWorkout(id);
         if (response) {
-          alert('Workout deleted successfully!');
-          setWorkouts(workouts.filter(workout => workout._id !== id)); // Remove from local state
+          notifySuccess('Workout deleted successfully!');
+          setWorkouts(workouts.filter((workout) => workout._id !== id));
         } else {
-          alert('Error deleting workout!');
+          notifyError('Error deleting workout!');
         }
       } catch (err) {
-        alert('An error occurred while deleting the workout');
+        notifyError('An error occurred while deleting the workout');
       }
     }
   };
@@ -65,11 +76,11 @@ const WorkoutsPage: React.FC = () => {
   const handleUpdateWorkout = async () => {
     try {
       const updatedWorkout = await updateWorkout(editingWorkout._id, updatedTitle, updatedExercises);
-      setWorkouts(workouts.map(workout => (workout._id === updatedWorkout._id ? updatedWorkout : workout)));
+      setWorkouts(workouts.map((workout) => (workout._id === updatedWorkout._id ? updatedWorkout : workout)));
       setEditingWorkout(null);
-      alert('Workout updated successfully!');
+      notifySuccess('Workout updated successfully!');
     } catch (error) {
-      alert('Failed to update workout!');
+      notifyError('Failed to update workout!');
     }
   };
 
@@ -98,21 +109,19 @@ const WorkoutsPage: React.FC = () => {
     setUpdatedExercises(updatedExercisesCopy);
   };
 
-  // Função para fazer logoff
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove o token do localStorage
-    router.push('/login'); // Redireciona para a página de login
+    localStorage.removeItem('token');
+    router.push('/login');
+    notifySuccess('Logged out successfully!');
   };
 
-  // Função para voltar para a página anterior
   const handleGoBack = () => {
-    router.back(); // Volta para a página anterior
+    router.back();
   };
 
   return (
     <Box sx={{ maxWidth: 800, margin: 'auto', padding: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-        {/* Botão para voltar para a tela anterior */}
         <IconButton onClick={handleGoBack} sx={{ color: 'black' }}>
           <ArrowBack />
         </IconButton>
@@ -121,7 +130,6 @@ const WorkoutsPage: React.FC = () => {
           Your Workouts
         </Typography>
 
-        {/* Botão de Logout pequeno ao lado do título */}
         <Button
           variant="outlined"
           onClick={handleLogout}
@@ -160,7 +168,6 @@ const WorkoutsPage: React.FC = () => {
         </List>
       )}
 
-      {/* Edição de treino */}
       {editingWorkout && (
         <Box sx={{ marginTop: 4 }}>
           <Typography variant="h5" gutterBottom>
@@ -175,7 +182,6 @@ const WorkoutsPage: React.FC = () => {
             sx={{ marginBottom: 2 }}
           />
 
-          {/* Exercises to edit */}
           {updatedExercises.map((exercise, index) => (
             <Box key={index} sx={{ marginBottom: 2 }}>
               <TextField
