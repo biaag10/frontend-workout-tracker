@@ -1,8 +1,6 @@
-const API_URL = process.env.NEXT_PUBLIC_API_VERCEL_URL;
-
 export const registerUser = async (name: string, username: string, email: string, password: string) => {
   try {
-    const response = await fetch(`${API_URL}/users/register`, {
+    const response = await fetch('https://express-backend-mongodb.vercel.app/users/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
