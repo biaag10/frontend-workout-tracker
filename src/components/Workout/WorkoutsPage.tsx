@@ -14,8 +14,8 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { Delete, Edit, ArrowBack } from '@mui/icons-material';
-import { updateWorkout, deleteWorkout } from '../../app/workouts/actions/index';
-import { notifySuccess, notifyError } from '../toasts/index'; // Ajuste o caminho conforme seu projeto
+import { getAllWorkouts ,updateWorkout, deleteWorkout } from '../../app/workouts/actions/index';
+import { notifySuccess, notifyError } from '../toasts/index'; 
 
 const WorkoutsPage: React.FC = () => {
   const [workouts, setWorkouts] = useState<any[]>([]);
@@ -26,30 +26,20 @@ const WorkoutsPage: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchWorkouts = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/workouts/all-workouts', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
+  const fetchWorkouts = async () => {
+    try {
+      const data = await getAllWorkouts(); 
+      setWorkouts(data);
+    } catch (err) {
+      notifyError('An error occurred while fetching workouts');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        if (response.ok) {
-          const data = await response.json();
-          setWorkouts(data);
-        } else {
-          notifyError('Failed to fetch workouts');
-        }
-      } catch (err) {
-        notifyError('An error occurred while fetching workouts');
-      } finally {
-        setLoading(false);
-      }
-    };
+  fetchWorkouts();
+}, []);
 
-    fetchWorkouts();
-  }, []);
 
   const handleEdit = (workout: any) => {
     setEditingWorkout(workout);

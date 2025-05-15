@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { Button, CircularProgress, Box, Typography, TextField } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { notifySuccess, notifyError } from '../toasts/index'; // ajuste o caminho conforme seu projeto
+import { notifySuccess, notifyError } from '../toasts/index'; // ajuste o caminho conforme o seu projeto
+import { createWorkout } from '../../app/workouts/actions/index'; // importa a função centralizada
 
 const AddWorkoutForm: React.FC = () => {
   const [workoutTitle, setWorkoutTitle] = useState('');
@@ -44,26 +45,14 @@ const AddWorkoutForm: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/workouts/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ title: workoutTitle, exercises }),
-      });
-
-      if (response.ok) {
-        notifySuccess('Workout added successfully!');
-        setWorkoutTitle('');
-        setExercises([]);
-        router.push('/workouts');
-      } else {
-        const errorData = await response.json();
-        notifyError(errorData.message || 'Error adding workout!');
-      }
-    } catch (err) {
-      notifyError('An error occurred. Please try again.');
+      // Usando a função centralizada para criar treino
+      await createWorkout(workoutTitle, exercises);
+      notifySuccess('Workout added successfully!');
+      setWorkoutTitle('');
+      setExercises([]);
+      router.push('/workouts');
+    } catch (error: any) {
+      notifyError(error.message || 'An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }

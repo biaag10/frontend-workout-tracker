@@ -120,11 +120,11 @@ export const deleteWorkout = async (workoutId: string) => {
 export const getAllWorkouts = async () => {
   try {
     const response = await fetch('http://localhost:3000/workouts/all-workouts', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
 
     if (!response.ok) {
       const errorData = await response.json();
